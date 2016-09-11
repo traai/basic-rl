@@ -64,7 +64,7 @@ pole_angle_bins = pd.cut([-2, 2], bins=10, retbins=True)[1][1:-1]
 cart_velocity_bins = pd.cut([-1, 1], bins=10, retbins=True)[1][1:-1]
 angle_rate_bins = pd.cut([-3.5, 3.5], bins=10, retbins=True)[1][1:-1]
 
-q_agent = Agent(0.05, 0.99, env, n_states, n_actions)
+q_agent = Agent(0.075, 0.99, env, n_states, n_actions)
 step = 0
 for e in xrange(MAX_STEPS): 
     o = env.reset()
