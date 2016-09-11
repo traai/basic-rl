@@ -59,7 +59,7 @@ bins = 10
 n_states = bins ** n_features
 n_actions = env.action_space.n
 position_bins = pd.cut([-1.2, 0.6], bins=bins, retbins=True)[1][1:-1]
-velocity_bins = pd.cut([-0.07, 0.07], bins=5, retbins=True)[1][1:-1]
+velocity_bins = pd.cut([-0.07, 0.07], bins=bins, retbins=True)[1][1:-1]
 
 q_agent = Agent(0.05, 0.99, env, n_states, n_actions)
 step = 0
@@ -79,6 +79,5 @@ for e in xrange(50000):
         if done:
             print "Episode=" + str(e) + ", Total episodic reward=" + str(accum_r)
             break
-
 env.monitor.close()
 print q_agent.q_table
