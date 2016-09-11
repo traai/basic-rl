@@ -3,8 +3,8 @@ import pandas as pd
 import numpy as np
 import random
 
-MAX_STEPS = 10000
-MAX_EPSILON_RED_STEPS = 100
+MAX_STEPS = 50000
+MAX_EPSILON_RED_STEPS = 5000
 
 class Agent(object):
     def __init__(self, eta, gamma, env, num_states, num_actions):
@@ -12,7 +12,8 @@ class Agent(object):
         self.gamma = gamma
         self.actions = [i for i in xrange(num_actions)]
         self.env = env
-        self.q_table = np.random.uniform(low=-1, high=1, size=(num_states, num_actions))
+        # self.q_table = np.random.uniform(low=-1, high=1, size=(num_states, num_actions))
+        self.q_table = np.zeros(shape=(num_states, num_actions))
         self.epsilon = 0.5
         self.epsilon_init = 0.5
         self.epsilon_final = 0.3
@@ -58,9 +59,9 @@ bins = 10
 n_states = bins ** n_features
 n_actions = env.action_space.n
 position_bins = pd.cut([-1.2, 0.6], bins=bins, retbins=True)[1][1:-1]
-velocity_bins = pd.cut([-0.07, 0.07], bins=bins, retbins=True)[1][1:-1]
+velocity_bins = pd.cut([-0.07, 0.07], bins=5, retbins=True)[1][1:-1]
 
-q_agent = Agent(0.005, 0.99, env, n_states, n_actions)
+q_agent = Agent(0.05, 0.99, env, n_states, n_actions)
 step = 0
 for e in xrange(50000): 
     o = env.reset()
@@ -69,7 +70,7 @@ for e in xrange(50000):
     for t in xrange(200):
         a = q_agent.policy(s)
         o, r, done, i = q_agent.execute_action(a)
-        env.render()
+        # env.render()
         new_s = q_agent.build_state(o)
         q_agent.updateQ(s, a, r, new_s)
         s = new_s
