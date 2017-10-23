@@ -52,7 +52,7 @@ class Agent(object):
 
 	def policy(self, s):
 		epsilon = random.uniform(0, 1)
-		if epsilon <= 0.1:
+		if epsilon <= 0.2:
 			if random.uniform(0, 1) <= 0.5:
 				action = '1'
 			else:
@@ -60,15 +60,31 @@ class Agent(object):
 		else:
 			action = self.argmaxQ(s)
 		return action
+	def current_policy(self):
+		return {'A': self.argmaxQ('A'), 
+			'B': self.argmaxQ('B')}
 
 env = Environment()
 q_agent = Agent(0.1, 0.9, env)
 s = env.s
-for t in xrange(0, 100000):
+for t in xrange(0, 5000):
 	a = q_agent.policy(s)
 	print "time=" + str(t) + ",  state=" + s + ",  action=" + a
 	r, new_s = q_agent.execute_action(a)
 	print "\n\t\t\t\t reward=" + str(r)
 	q_agent.updateQ(s, a, r, new_s)
 	s = new_s
-print q_agent.q_table
+
+print "\n\n-------------------------------------------" 
+print "After some exploration, agent figured this:" 
+print "\nLong term action values:"
+print "(A, 1):", q_agent.q_table['A']['1']
+print "(A, 2):", q_agent.q_table['A']['2']
+print "(B, 1):", q_agent.q_table['B']['1']
+print "(B, 2):", q_agent.q_table['B']['2']
+print "\nPolicy to choose actions:" 
+policy = q_agent.current_policy()
+print "A:", policy['A']
+print "B:", policy['B']
+print "-------------------------------------------" 
+print "-------------------------------------------" 
